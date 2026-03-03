@@ -1,21 +1,32 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
-import pygame
+# -*- coding: utf-8 -*-
+import sys
 
-from code import Menu
+import pygame as pygame
+from pygame import Surface, Rect
+from pygame.font import Font
+
+from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION
+from code.Level import Level
+from code.Menu import Menu
+
 
 class Game:
     def __init__(self):
         pygame.init()
-        self.window = pygame.display.set_mode(size=(600, 480))
+        self.window = pygame.display.set_mode(size=(WIN_WIDTH, WIN_HEIGHT))
 
-def run(self):
-    while True:
-        menu = Menu(self.window)  
-        menu.run() 
-        pass
+    def run(self):
+        while True:
+            menu = Menu(self.window)
+            menu_return = menu.run()
 
-        # for event in pygame.event.get(): #checar por todos os eventos
-            #     if event.type == pygame.QUIT: #se o evento for de fechar a janela
-            #          pygame.quit() #fechar a janela
-            #         quit() #sair do programa
+            if menu_return in [MENU_OPTION[0], MENU_OPTION[1], MENU_OPTION[2]]:
+                level = Level(self.window, 'Level1', menu_return)
+                level_return = level.run()
+                if level_return:
+                    level = Level(self.window, 'Level2', menu_return)
+                    level_return = level.run()
+            else:
+                pygame.quit()
+                sys.exit()
